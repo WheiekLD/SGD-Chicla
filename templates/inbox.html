@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}{% if archived %}Archivo{% else %}Bandeja de expedientes{% endif %} | SGD Chicla{% endblock %}
+{% block content %}
+<div class="heading">
+  <div>{% if archived %}<h1>Archivo</h1><p>Consulta expedientes cuya atención ya concluyó.</p>{% else %}<h1>Bandeja de expedientes</h1><p>Consulta y seguimiento de los trámites de la municipalidad.</p>{% endif %}</div>
+  {% if not archived and request.user.role != 'area' %}<a class="button primary" href="{% url 'new_record' %}"><span data-icon="plus"></span>Nuevo expediente</a>{% endif %}
+</div>
+{% if not archived %}
+<section class="banner" aria-label="Resumen de la bandeja">
+  <div class="banner-intro"><h2>Carga de trabajo</h2><p>Consulta los expedientes por estado.</p></div>
+  {% for key,label,total in metrics %}<a class="metric" href="?estado={{ key }}" {% if state == key %}aria-current="true"{% endif %}><strong>{{ total|stringformat:"02d" }}</strong><span>{{ label }}</span></a>{% endfor %}
+</section>
+{% endif %}
+<section class="panel" aria-labelledby="list-title">
+  <div class="panel-head"><h2 id="list-title">{% if archived %}Expedientes archivados{% else %}Expedientes en trámite{% endif %}</h2></div>
+  {% if not archived %}<nav class="tabs" aria-label="Bandejas por estado">{% for key,label,total in tabs %}<a class="tab" href="?estado={{ key }}" {% if state == key %}aria-current="page"{% endif %}>{{ label }} <span>{{ total }}</span></a>{% endfor %}</nav>{% endif %}
+  <form class="filters real-filters" method="get">
+    <label class="search"><span data-icon="search"></span><span class="sr-only">Código, asunto o remitente</span><input name="q" type="search" placeholder="Buscar código, asunto o remitente" value="{{ term }}" maxlength="120"></label>
+    {% if not archived %}<select name="estado" class="field" aria-label="Estado">{% for key,label,total in tabs %}<option value="{{ key }}"{% if state == key %} selected{% endif %}>{% if key %}{{ label }}{% else %}Todos los estados{% endif %}</option>{% endfor %}</select>{% endif %}
+    <select name="area" class="field" aria-label="Área"><option value="">Todas las áreas</option>{% for area in areas %}<option value="{{ area.pk }}"{% if area.pk|stringformat:"s" == area_selected %} selected{% endif %}>{{ area.name }}</option>{% endfor %}</select>
+    <button class="button" type="submit">Buscar</button>
+    <details class="wide date-filters" {% if request.GET.desde or request.GET.hasta %}open{% endif %}>
+      <summary>Filtrar por fecha de registro</summary>
+      <div><label>Desde <input type="date" name="desde" value="{{ request.GET.desde }}"></label><label>Hasta <input type="date" name="hasta" value="{{ request.GET.hasta }}"></label></div>
+    </details>
+  </form>
+  <div class="table-wrap" tabindex="0" role="region" aria-label="Resultados de expedientes">
+    <table><thead><tr><th scope="col">Expediente</th><th scope="col">Asunto</th><th scope="col">Área</th><th scope="col">Estado</th><th scope="col">Registro</th><th scope="col"><span class="sr-only">Abrir</span></th></tr></thead>
+    <tbody id="rows">
+    {% for item in page %}
+    <tr><td><a class="record" href="{% url 'record' item.pk %}">{{ item.code }}</a><small>{{ item.document_type }}</small></td>
+      <td><strong>{{ item.subject }}</strong><small>{{ item.sender }}</small></td><td>{{ item.area|default:"Sin asignar" }}</td>
+      <td>{% include 'status.html' %}</td><td>{{ item.created_at|date:"j M Y" }}</td>
+      <td><a class="icon-button" href="{% url 'record' item.pk %}" aria-label="Abrir {{ item.code }}" data-icon="chevron-right"></a></td></tr>
+    {% empty %}<tr><td colspan="6" class="empty">No hay expedientes que coincidan con esta consulta.</td></tr>{% endfor %}
+    </tbody></table>
+  </div>
+  {% include 'pager.html' %}
+</section>
+{% endblock %}

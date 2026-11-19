@@ -1,0 +1,1 @@
+<span class="status status-{{ item.state }}"><span data-icon="{% if item.state == 'pending' %}inbox{% elif item.state == 'active' %}clock{% elif item.state == 'done' %}check{% elif item.state == 'archived' %}archive{% elif item.state == 'returned' %}undo{% else %}file{% endif %}"></span>{{ item.get_state_display }}</span>

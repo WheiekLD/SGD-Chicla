@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Cargo {{ item.code }} | SGD Chicla{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'record' item.pk %}"><span data-icon="arrow"></span>Volver al expediente</a>
+<section class="panel form receipt-sheet">
+  <div class="heading receipt-heading"><img class="receipt-logo" src="{% static 'images/escudo-chicla.png' %}" width="76" height="76" alt="Escudo de Chicla"><div><h1>Cargo de recepción</h1><p>Municipalidad Distrital de Chicla · Prototipo web</p></div></div>
+  <dl class="details">
+    <div><dt>Expediente</dt><dd>{{ item.code }}</dd></div><div><dt>Fecha de recepción</dt><dd>{{ item.created_at|date:"j M Y, H:i" }}</dd></div>
+    <div><dt>Tipo</dt><dd>{{ item.document_type }}</dd></div><div><dt>Canal</dt><dd>{{ item.get_channel_display }}</dd></div>
+    <div class="wide"><dt>Asunto</dt><dd>{{ item.subject }}</dd></div>
+    <div><dt>Remitente</dt><dd>{{ item.sender }}</dd></div><div><dt>Registrado por</dt><dd>{{ item.creator.display_name }}</dd></div>
+  </dl>
+  <div class="action-list"><button class="button primary" type="button" data-print>Imprimir cargo</button></div>
+</section>
+{% endblock %}

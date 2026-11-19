@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: sgd-chicla
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: python manage.py prepare && gunicorn sgd.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 2 --access-logfile -
+    healthCheckPath: /salud/
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.18"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sgd-chicla-db
+          property: connectionString
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: SESSION_IDLE_SECONDS
+        value: "300"
+      - key: SEED_DEMO
+        value: "1"
+databases:
+  - name: sgd-chicla-db
+    plan: free
+    region: oregon
+    postgresMajorVersion: "17"
+    ipAllowList: []

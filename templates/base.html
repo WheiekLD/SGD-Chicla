@@ -1,0 +1,51 @@
+{% load static %}<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b3673">
+<meta name="description" content="Sistema de gestión documentaria de Chicla. Prototipo web.">
+<title>{% block title %}SGD Chicla{% endblock %}</title>
+<link rel="icon" type="image/png" href="{% static 'images/escudo-chicla.png' %}">
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+<link rel="stylesheet" href="{% static 'app.css' %}">
+<script defer src="{% static 'app.js' %}"></script>
+</head>
+<body>
+<a class="skip" href="#principal">Saltar al contenido</a>
+{% if request.user.is_authenticated %}
+<div class="layout">
+  <aside class="sidebar" id="navigation" aria-label="Navegación principal">
+    <a class="brand" href="{% url 'inbox' %}"><img class="brand-logo" src="{% static 'images/escudo-chicla.png' %}" width="56" height="56" alt=""><span><strong>SGD Chicla</strong><small>Municipalidad Distrital</small></span></a>
+    <nav aria-label="Módulos">
+      <p class="nav-label">Gestión documentaria</p>
+      <a class="nav-link" href="{% url 'inbox' %}" {% if section == 'inbox' %}aria-current="page"{% endif %}><span data-icon="inbox"></span>Bandeja de expedientes</a>
+      {% if request.user.role != 'area' %}<a class="nav-link" href="{% url 'new_record' %}" {% if section == 'new_record' %}aria-current="page"{% endif %}><span data-icon="file-plus"></span>Registrar expediente</a>{% endif %}
+      <a class="nav-link" href="{% url 'archive' %}" {% if section == 'archive' %}aria-current="page"{% endif %}><span data-icon="archive"></span>Archivo</a>
+      {% if request.user.role == 'admin' %}
+      <p class="nav-label">Administración</p>
+      <a class="nav-link" href="{% url 'accounts' %}" {% if section == 'accounts' %}aria-current="page"{% endif %}><span data-icon="users"></span>Usuarios y áreas</a>
+      <a class="nav-link" href="{% url 'audit' %}" {% if section == 'audit' %}aria-current="page"{% endif %}><span data-icon="shield"></span>Bitácora</a>
+      {% endif %}
+    </nav>
+    <div class="sidebar-foot"><span data-icon="file"></span><div><strong>Prototipo web</strong></div></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <div class="top-left"><button type="button" class="icon-button menu" id="menu" aria-label="Mostrar navegación" aria-expanded="false" aria-controls="navigation" data-icon="menu"></button><a class="mobile-brand" href="{% url 'inbox' %}" aria-label="Bandeja de SGD Chicla"><img src="{% static 'images/escudo-chicla.png' %}" width="34" height="34" alt=""></a><div class="crumb"><span>SGD Chicla</span><span data-icon="chevron-right"></span><strong>{{ request.user.get_role_display }}</strong></div></div>
+      <div class="account"><span class="account-name">{{ request.user.display_name }}</span>
+        <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="button sign-out" type="submit">Cerrar sesión</button></form>
+      </div>
+    </header>
+{% else %}
+<div class="guest-shell"><div class="workspace">
+{% endif %}
+    <main id="principal" class="content" tabindex="-1">
+      {% if messages %}<div class="notices" role="status">{% for message in messages %}<p>{{ message }}</p>{% endfor %}</div>{% endif %}
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="footer"><span>SGD Chicla{% if request.user.is_authenticated %} · Versión {{ sgd_release }}{% endif %}</span><span>Municipalidad Distrital de Chicla · Huarochirí</span></footer>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | SGD Chicla{% endblock %}
+{% block content %}
+<section class="panel pad error-page"><h1>{{ title }}</h1><p class="note">{{ description }}</p><div class="form-actions"><a class="button primary" href="{% url 'inbox' %}">Ir a la bandeja</a></div></section>
+{% endblock %}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0b3673">
+<meta name="description" content="Prototipo web del sistema de gestión documentaria de Chicla.">
+<title>Bandeja de expedientes | SGD Chicla</title>
+<link rel="icon" type="image/png" href="../static/images/escudo-chicla.png">
+<link rel="stylesheet" href="../static/styles.css">
+<script defer src="demo.js"></script>
+</head>
+<body>
+<a class="skip" href="#principal">Saltar al contenido</a>
+<div class="layout">
+  <aside class="sidebar" id="navigation" aria-label="Navegación principal">
+    <a class="brand" href="#bandeja"><img class="brand-logo" src="../static/images/escudo-chicla.png" width="56" height="56" alt=""><span><strong>SGD Chicla</strong><small>Municipalidad Distrital</small></span></a>
+    <nav aria-label="Módulos">
+      <p class="nav-label">Mesa de Partes</p>
+      <a class="nav-link" href="#bandeja" data-route="bandeja"><span data-icon="inbox"></span>Bandeja de expedientes</a>
+      <a class="nav-link" href="#registro" data-route="registro"><span data-icon="file-plus"></span>Registrar expediente</a>
+      <a class="nav-link" href="#archivo" data-route="archivo"><span data-icon="archive"></span>Archivo</a>
+      <p class="nav-label">Administración</p>
+      <a class="nav-link" href="#usuarios" data-route="usuarios"><span data-icon="users"></span>Usuarios y áreas</a>
+      <a class="nav-link" href="#bitacora" data-route="bitacora"><span data-icon="shield"></span>Bitácora</a>
+    </nav>
+    <div class="sidebar-foot"><span data-icon="file"></span><div><strong>Prototipo web</strong></div></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <div class="top-left"><button type="button" class="icon-button menu" id="menu" aria-label="Mostrar navegación" aria-expanded="false" aria-controls="navigation" data-icon="menu"></button><div class="crumb"><span>Gestión documentaria</span><span data-icon="chevron-right"></span><strong id="crumb">Bandeja</strong></div></div>
+      <div class="account"><span class="avatar" id="avatar" aria-hidden="true">AD</span><label><span class="sr-only">Simular perfil</span><select id="profile"><option value="admin">Administrador</option><option value="office">Mesa de Partes</option><option value="area">Responsable de área</option></select><small>Perfil seleccionado</small></label></div>
+    </header>
+    <main id="principal" class="content" tabindex="-1">
+      <noscript><h1>Bandeja de expedientes</h1><p>Activa JavaScript para navegar por la maqueta y probar el flujo documentario.</p></noscript>
+      <div id="view"></div>
+    </main>
+    <footer class="footer"><span>SGD Chicla</span><span>Municipalidad Distrital de Chicla · Huarochirí</span></footer>
+  </div>
+</div>
+<div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+<dialog id="action-dialog" aria-labelledby="dialog-title"></dialog>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}{{ item.code }} | SGD Chicla{% endblock %}
+{% block content %}
+<a class="back" href="{% if archived %}{% url 'archive' %}{% else %}{% url 'inbox' %}{% endif %}"><span data-icon="arrow"></span>{% if archived %}Volver a Archivo{% else %}Volver a Bandeja{% endif %}</a>
+<div class="heading"><div><h1>{{ item.code }}</h1><p>{{ item.subject }}</p></div>{% include 'status.html' %}</div>
+<div class="detail-grid">
+  <div>
+    <section class="panel pad"><h2>Datos del expediente</h2>
+      <dl class="details">
+        <div><dt>Tipo</dt><dd>{{ item.document_type }}</dd></div>
+        <div><dt>Fecha de registro</dt><dd>{{ item.created_at|date:"j M Y, H:i" }}</dd></div>
+        <div><dt>Remitente</dt><dd>{{ item.sender }}</dd></div>
+        <div><dt>Canal de ingreso</dt><dd>{{ item.get_channel_display }}</dd></div>
+        <div><dt>Área asignada</dt><dd>{{ item.area|default:"Sin asignar" }}</dd></div>
+        <div><dt>Responsable</dt><dd>{{ item.assignee.display_name|default:"Mesa de Partes" }}</dd></div>
+        <div><dt>Fecha objetivo</dt><dd>{{ item.due|date:"j M Y"|default:"Sin fecha asignada" }}</dd></div>
+      </dl>
+      <div class="action-list">
+        {% for action,label in actions.items %}<a class="button{% if forloop.first %} primary{% endif %}" href="{% url 'transition' item.pk action %}">{{ label }}</a>{% endfor %}
+        <a class="button" href="{% url 'receipt' item.pk %}">Ver cargo interno</a>
+      </div>
+    </section>
+    <section class="panel pad"><h2>Adjuntos</h2>
+      {% for attachment in attachments %}<p class="file-line"><span data-icon="paperclip"></span><a class="record file-link" href="{% url 'download' attachment.pk %}">{{ attachment.name }}</a><small>{{ attachment.size|filesizeformat }}</small></p>
+      {% empty %}<p class="note">Este expediente no tiene archivos adjuntos.</p>{% endfor %}
+      {% if not archived %}
+      <form class="attachment-form" method="post" action="{% url 'upload' item.pk %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ attachment_form.pdf.label_tag }} {{ attachment_form.pdf }} {{ attachment_form.pdf.errors }} {{ attachment_form.non_field_errors }}
+        <p class="note">Hasta tres archivos PDF de 5 MiB por expediente.</p>
+        <button class="button" type="submit">Adjuntar PDF</button>
+      </form>
+      {% endif %}
+    </section>
+  </div>
+  <section class="panel pad"><h2>Historial de custodia</h2>
+    <ol class="timeline">{% for event in movements %}<li><strong>{{ event.title }}</strong><small>{{ event.created_at|date:"j M Y, H:i" }} · {{ event.actor.display_name }}</small>{% if event.destination %}<p>{{ event.destination }}</p>{% endif %}{% if event.note %}<p>{{ event.note }}</p>{% endif %}</li>{% empty %}<li>Sin movimientos.</li>{% endfor %}</ol>
+  </section>
+</div>
+{% endblock %}

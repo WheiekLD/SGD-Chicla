@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | SGD Chicla{% endblock %}
+{% block content %}
+<a class="back" href="{{ back }}"><span data-icon="arrow"></span>Volver</a>
+<div class="heading"><div><h1>{{ title }}</h1><p>{{ intro }}</p></div></div>
+<form method="post" class="panel form">
+  {% csrf_token %}
+  {% include 'fields.html' %}
+  <div class="form-actions"><button class="button primary" type="submit">{{ submit }}</button><a class="button" href="{{ back }}">Cancelar</a></div>
+</form>
+{% endblock %}

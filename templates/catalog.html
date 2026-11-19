@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | SGD Chicla{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'accounts' %}"><span data-icon="arrow"></span>Volver a Usuarios y áreas</a>
+<div class="heading"><div><h1>{{ title }}</h1></div></div>
+<div class="detail-grid"><form class="panel form" method="post"><h2>Agregar al catálogo</h2>{% csrf_token %}{% include 'fields.html' %}<div class="form-actions"><button type="submit" class="button primary">Agregar</button></div></form>
+<section class="panel pad"><h2>Registros del catálogo</h2><ul class="catalog-list">{% for item in page %}<li>{{ item.name }}</li>{% empty %}<li>Sin registros.</li>{% endfor %}</ul>{% include 'pager.html' %}</section></div>
+{% endblock %}

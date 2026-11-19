@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+.test-deps/
+.test-pg/
+.impeccable/
+.env
+*.sqlite3
+*.dump
+staticfiles/

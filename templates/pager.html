@@ -1,0 +1,9 @@
+<div class="row-end">
+  <span>{% if page.paginator.count %}Mostrando {{ page.start_index }}–{{ page.end_index }} de {{ page.paginator.count }}{% else %}0 resultados{% endif %}</span>
+  {% if page.has_other_pages %}
+  <div class="page-links">
+    {% if page.has_previous %}<a class="icon-button" aria-label="Página anterior" href="?{% if page_query %}{{ page_query }}&amp;{% endif %}pagina={{ page.previous_page_number }}" data-icon="arrow"></a>{% endif %}
+    {% if page.has_next %}<a class="icon-button" aria-label="Página siguiente" href="?{% if page_query %}{{ page_query }}&amp;{% endif %}pagina={{ page.next_page_number }}" data-icon="chevron-right"></a>{% endif %}
+  </div>
+  {% endif %}
+</div>

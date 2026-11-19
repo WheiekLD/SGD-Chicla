@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Usuarios y áreas | SGD Chicla{% endblock %}
+{% block content %}
+<div class="heading"><div><h1>Usuarios y áreas</h1><p>Gestiona cuentas, permisos y catálogos del sistema.</p></div><a class="button primary" href="{% url 'new_account' %}"><span data-icon="plus"></span>Nueva cuenta</a></div>
+<div class="section-links"><a class="button" href="{% url 'catalog' 'areas' %}">Áreas</a><a class="button" href="{% url 'catalog' 'tipos' %}">Tipos documentarios</a></div>
+<section class="panel"><div class="table-wrap" tabindex="0" role="region" aria-label="Cuentas">
+<table><thead><tr><th scope="col">Cuenta</th><th scope="col">Perfil</th><th scope="col">Área</th><th scope="col">Estado</th><th scope="col">Acción</th></tr></thead>
+<tbody>{% for account in page %}
+<tr><td><strong>{{ account.display_name }}</strong><small>{{ account.username }}</small></td><td>{{ account.get_role_display }}</td><td>{{ account.area|default:"—" }}</td><td>{{ account.is_active|yesno:"Activa,Inactiva" }}</td><td><a class="record" href="{% url 'edit_account' account.pk %}">Editar<span class="sr-only"> {{ account.username }}</span></a></td></tr>
+{% empty %}<tr><td class="empty" colspan="5">Sin cuentas.</td></tr>{% endfor %}</tbody></table></div>
+{% include 'pager.html' %}</section>
+{% endblock %}

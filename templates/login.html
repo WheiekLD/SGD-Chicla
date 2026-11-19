@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Ingresar | SGD Chicla{% endblock %}
+{% block content %}
+<section class="login-layout">
+  <div class="login-brand">
+    <img class="login-logo" src="{% static 'images/escudo-chicla.png' %}" width="220" height="220" alt="Escudo de la Municipalidad Distrital de Chicla" fetchpriority="high">
+    <p class="login-municipality">Municipalidad Distrital de Chicla</p>
+    <h1>Sistema de gestión documentaria</h1>
+    <small>Prototipo web</small>
+  </div>
+  <form method="post" class="form login-form">
+    <h2>Ingresar</h2>
+    <p class="note">Ingresa con tu cuenta.</p>
+    {% csrf_token %}
+    {% include 'fields.html' %}
+    <div class="form-actions"><button class="button primary" type="submit">Iniciar sesión</button></div>
+  </form>
+</section>
+{% endblock %}
